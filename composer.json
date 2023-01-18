@@ -1,0 +1,33 @@
+{
+    "name": "wamesk/laravel-commands",
+    "description": "Laravel create commands.",
+    "keywords": [
+        "laravel",
+        "command",
+        "model",
+        "event",
+        "observer",
+        "controller"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.0|^8.1|^8.2",
+        "laravel/framework": "^9.0",
+        "outl1ne/nova-sortable": "^3.0",
+        "wamesk/laravel-api-response": "^1.1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wame\\LaravelCommands\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wame\\LaravelCommands\\LaravelCommandsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
