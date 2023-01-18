@@ -55,8 +55,13 @@ class Validator
         $validator = \Illuminate\Support\Facades\Validator::make($data, $rules);
 
         if ($validator->fails()) {
+            $errors = $validator->messages()->toArray();
+            $errorText = 'Validation has :number ';
+            $errorText .= count($errors)>1 ? 'errors':'error';
+
             return ApiResponse::errors($validator->messages()->toArray())
                 ->code(static::$code, static::$prefix)
+                ->message(__($errorText, ['number' => count($errors)]))
                 ->response(static::$statusCode);
         } else {
             return false;
