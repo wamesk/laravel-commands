@@ -34,7 +34,9 @@ class WameApiController extends Command
 
         $controllerName = $name. "Controller";
         $controllerFile = $version ? "Http\Controllers\\$version\\$controllerName.php" : "Http\Controllers\\$controllerName.php";
-        $resourceName = $version ? $version ."\\". $name. "Resource":$name. "Resource";
+
+        $resourceName = $name .'Resource';
+        $resourcePathName = $version ? $version ."\\". $resourceName : $resourceName;
 
         $namespace = $version ? "namespace App\Http\Controllers\\". $version .";\n" : "namespace App\Http\Controllers;\n";
 
@@ -52,7 +54,7 @@ class WameApiController extends Command
                 $namespace,
                 "\n",
                 "use App\Http\Controllers\Controller;\n",
-                "use App\Http\Resources\\$resourceName;\n",
+                "use App\Http\Resources\\$resourcePathName;\n",
                 "use App\Models\\$name;\n",
                 "use Illuminate\Http\JsonResponse;\n",
                 "use Illuminate\Http\Request;\n",
@@ -84,7 +86,7 @@ class WameApiController extends Command
                 "\n",
                 "            \$data = $name::paginate(\$perPage);\n",
                 "\n",
-                "            return ApiResponse::collection(\$data, ". $name ."Resource::class)->code()->response();\n",
+                "            return ApiResponse::collection(\$data, ". $resourceName ."::class)->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(\$e->getCode());\n",
                 "        }\n",
@@ -108,7 +110,7 @@ class WameApiController extends Command
                 "\n",
                 "            ]);\n",
                 "\n",
-                "            return ApiResponse::data(\$entity)->code()->response(201);\n",
+                "            return ApiResponse::data($resourceName::(\$entity))->code()->response(201);\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(\$e->getCode());\n",
                 "        }\n",
@@ -128,7 +130,7 @@ class WameApiController extends Command
                 "            \$entity = $name::find(\$id);\n",
                 "            if (!\$entity) return ApiResponse::code()->response(404);;\n",
                 "\n",
-                "            return ApiResponse::data(\$entity)->code()->response();\n",
+                "            return ApiResponse::data($resourceName::(\$entity))->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(\$e->getCode());\n",
                 "        }\n",
@@ -158,7 +160,7 @@ class WameApiController extends Command
                 "\n",
                 "            ]);\n",
                 "\n",
-                "            return ApiResponse::data(\$entity)->code()->response();\n",
+                "            return ApiResponse::data($resourceName::(\$entity))->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(\$e->getCode());\n",
                 "        }\n",
@@ -180,7 +182,7 @@ class WameApiController extends Command
                 "\n",
                 "            \$entity->delete();\n",
                 "\n",
-                "            return ApiResponse::data(\$entity)->code()->response();\n",
+                "            return ApiResponse::data($resourceName::(\$entity))->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(\$e->getCode());\n",
                 "        }\n",
