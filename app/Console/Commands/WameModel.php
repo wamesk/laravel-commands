@@ -34,7 +34,7 @@ class WameModel extends Command
     ];
 
     protected array $sorting = [
-        true => "    protected array \$sortable = [\n        'order_column_name' => 'sort',\n        'sort_when_creating' => 'true',\n        'sort_on_has_many' => 'true',\n        'sort_on_belongs_to' => 'true',\n        'nova_order_by' => 'ASC',\n    ];\n",
+        true => "\n    protected array \$sortable = [\n        'order_column_name' => 'sort',\n        'sort_when_creating' => 'true',\n        'sort_on_has_many' => 'true',\n        'sort_on_belongs_to' => 'true',\n        'nova_order_by' => 'ASC',\n    ];\n",
         false => ""
     ];
 
@@ -76,7 +76,6 @@ class WameModel extends Command
                 "        'updated_at' => 'datetime',\n",
                 "        'deleted_at' => 'datetime',\n",
                 "    ];\n",
-                "\n",
                 $this->sorting[$sorting],
                 "}\n",
             ];

@@ -19,5 +19,7 @@ return [
         'migration' => true,
         'observer' => true,
         'events' => true,
+        'listeners' => true,
+        'api-controllers' => true,
     ],
 ];

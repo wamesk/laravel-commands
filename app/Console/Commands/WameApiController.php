@@ -42,7 +42,7 @@ class WameApiController extends Command
 
         Helpers::createDir($version ? 'Http/Controllers/'. $version:'Http/Controllers');
 
-        if (file_exists(app_path("Models/$name.php"))) {
+        if (file_exists(app_path("$controllerFile"))) {
             return ['warn', __('Model :model already exist.', ['model' => $name])];
         } else {
             $file = Helpers::createFile($controllerFile);

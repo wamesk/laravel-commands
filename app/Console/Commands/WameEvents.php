@@ -59,7 +59,7 @@ class WameEvents extends Command
                 "     * @return void\n",
                 "     */\n",
                 "    public function __construct(\n",
-                "        public " . $modelName . ' $' . strtolower($modelName) . "\n",
+                "        public " . $modelName . " \$entity\n",
                 "    ) { }\n",
                 "\n",
                 "    /**\n",

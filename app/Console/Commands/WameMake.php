@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Wame\LaravelCommands\Utils\Helpers;
 
 class WameMake extends Command
 {
@@ -26,7 +25,9 @@ class WameMake extends Command
         'model',
         'migration',
         'observer',
-        'events'
+        'events',
+        'listeners',
+        'api-controller',
     ];
 
     public function handle()
