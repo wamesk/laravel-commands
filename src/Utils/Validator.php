@@ -12,14 +12,14 @@ class Validator
     protected static ?string $code = null;
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected static ?string $prefix = null;
+    protected static string $prefix = 'api';
 
     /**
-     * @var int|null
+     * @var int
      */
-    protected static ?int $statusCode = null;
+    protected static int $statusCode = 400;
 
     /**
      * @param string $code
@@ -38,7 +38,7 @@ class Validator
      * @param int $statusCode
      * @return static
      */
-    public static function statusCode(int $statusCode = 400): static
+    public static function statusCode(int $statusCode): static
     {
         static::$statusCode = $statusCode;
 
