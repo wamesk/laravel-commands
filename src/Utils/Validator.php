@@ -59,7 +59,7 @@ class Validator
                 ->code(static::$code, static::$prefix)
                 ->response(static::$statusCode);
         } else {
-            return true;
+            return false;
         }
     }
 }
