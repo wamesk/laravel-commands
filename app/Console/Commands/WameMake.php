@@ -57,12 +57,19 @@ class WameMake extends Command
         $console->note('Running commands...');
         foreach ($commands as $command) {
             $commandLabel = $this->commandLabels[$command];
-            if (config("wame-commands.make.$command", true)) {
+
+            if ($customConfiguration) {
                 $console->text("Creating $commandLabel...");
                 Artisan::call("wame:$command", ['name' => $modelName]);
                 $console->info("Created $commandLabel");
             } else {
-                $console->error("Configuration setting for $commandLabel is set false, skipping command");
+                if (config("wame-commands.make.$command", true)) {
+                    $console->text("Creating $commandLabel...");
+                    Artisan::call("wame:$command", ['name' => $modelName]);
+                    $console->info("Created $commandLabel");
+                } else {
+                    $console->error("Configuration setting for $commandLabel is set false, skipping command");
+                }
             }
         }
         $console->success('Success');
