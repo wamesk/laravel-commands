@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
 use Wame\LaravelCommands\Utils\Helpers;
@@ -41,9 +41,7 @@ class WameModel extends Command
     public function handle()
     {
         $name = $this->argument('name');
-
         $sorting = config('wame-commands.sorting', false);
-
         $idType = config('wame-commands.id-type', 'ulid');
 
         Helpers::createDir('Models');
@@ -58,14 +56,17 @@ class WameModel extends Command
                 "namespace App\Models;\n",
                 "\n",
                 $this->paths[$idType],
+                "use Illuminate\Database\Eloquent\Factories\HasFactory;",
+                "use Illuminate\Database\Eloquent\Model;",
                 "use Illuminate\Database\Eloquent\SoftDeletes;\n",
                 $sorting ? "use Spatie\EloquentSortable\Sortable;\n":"",
                 $sorting ? "use Spatie\EloquentSortable\SortableTrait;\n":"",
                 "\n",
-                "class $name extends BaseModel",
+                "class $name extends Model",
                 $sorting ? " implements Sortable":"",
                 "\n{\n",
                 "    use SoftDeletes;\n",
+                "    use HasFactory;\n",
                 $sorting ? "    use SortableTrait;\n":"",
                 "    " . $this->uses[$idType],
                 "\n",

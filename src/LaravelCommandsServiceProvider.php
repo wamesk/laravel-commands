@@ -4,6 +4,13 @@ namespace Wame\LaravelCommands;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Wame\LaravelCommands\Console\Commands\WameApiController;
+use Wame\LaravelCommands\Console\Commands\WameEvents;
+use Wame\LaravelCommands\Console\Commands\WameListeners;
+use Wame\LaravelCommands\Console\Commands\WameMake;
+use Wame\LaravelCommands\Console\Commands\WameMigration;
+use Wame\LaravelCommands\Console\Commands\WameModel;
+use Wame\LaravelCommands\Console\Commands\WameObserver;
 
 class LaravelCommandsServiceProvider extends ServiceProvider
 {
@@ -28,8 +35,16 @@ class LaravelCommandsServiceProvider extends ServiceProvider
             // Export configs
             $this->publishConfigs();
 
-            // Export commands
-            $this->publishCommands();
+            // Registering commands
+            $this->commands([
+                WameApiController::class,
+                WameEvents::class,
+                WameListeners::class,
+                WameMake::class,
+                WameMigration::class,
+                WameModel::class,
+                WameObserver::class,
+            ]);
         }
     }
 
@@ -41,15 +56,5 @@ class LaravelCommandsServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/wame-commands.php' => config_path('wame-commands.php'),
         ], 'config');
-    }
-
-    /**
-     * @return void
-     */
-    private function publishCommands(): void
-    {
-        $this->publishes([
-            __DIR__.'/../app/' => app_path(),
-        ], 'commands');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
 use Wame\LaravelCommands\Utils\Helpers;

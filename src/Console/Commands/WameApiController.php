@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
@@ -110,7 +110,7 @@ class WameApiController extends Command
                 "\n",
                 "            ]);\n",
                 "\n",
-                "            return ApiResponse::data($resourceName::(\$entity))->code()->response(201);\n",
+                "            return ApiResponse::data($resourceName::make(\$entity))->code()->response(201);\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(\$e->getCode());\n",
                 "        }\n",
@@ -130,7 +130,7 @@ class WameApiController extends Command
                 "            \$entity = $name::find(\$id);\n",
                 "            if (!\$entity) return ApiResponse::code()->response(404);;\n",
                 "\n",
-                "            return ApiResponse::data($resourceName::(\$entity))->code()->response();\n",
+                "            return ApiResponse::data($resourceName::make(\$entity))->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(\$e->getCode());\n",
                 "        }\n",
@@ -160,7 +160,7 @@ class WameApiController extends Command
                 "\n",
                 "            ]);\n",
                 "\n",
-                "            return ApiResponse::data($resourceName::(\$entity))->code()->response();\n",
+                "            return ApiResponse::data($resourceName::make(\$entity))->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(\$e->getCode());\n",
                 "        }\n",
@@ -182,7 +182,7 @@ class WameApiController extends Command
                 "\n",
                 "            \$entity->delete();\n",
                 "\n",
-                "            return ApiResponse::data($resourceName::(\$entity))->code()->response();\n",
+                "            return ApiResponse::data($resourceName::make(\$entity))->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(\$e->getCode());\n",
                 "        }\n",
