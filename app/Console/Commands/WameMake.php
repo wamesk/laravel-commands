@@ -30,12 +30,41 @@ class WameMake extends Command
         'api-controller',
     ];
 
+    protected array $commandLabels = [
+        'model' => 'Model',
+        'migration' => 'Migration',
+        'observer' => 'Observer',
+        'events' => 'Events',
+        'listeners' => 'Listeners',
+        'api-controller' => 'Api Controller and Resource',
+    ];
+
     public function handle()
     {
         $modelName = $this->argument('name');
+        $commands = $this->commands;
+        $console = $this->output;
 
-        foreach ($this->commands as $command) {
-            if (config("wame-commands.make.$command", true))  Artisan::call("wame:$command", ['name' => $modelName]);
+        $customConfiguration = $this->confirm('Would you like to customize configuration for current Model?');
+
+        if ($customConfiguration) {
+            foreach ($this->commands as $index => $command) {
+                $runCommand = $this->confirm('Create '. $this->commandLabels[$command] .'?', true);
+                if (!$runCommand) unset($commands[$index]);
+            }
         }
+
+        $console->note('Running commands...');
+        foreach ($commands as $command) {
+            $commandLabel = $this->commandLabels[$command];
+            if (config("wame-commands.make.$command", true)) {
+                $console->text("Creating $commandLabel...");
+                Artisan::call("wame:$command", ['name' => $modelName]);
+                $console->info("Created $commandLabel");
+            } else {
+                $console->error("Configuration setting for $commandLabel is set false, skipping command");
+            }
+        }
+        $console->success('Success');
     }
 }
