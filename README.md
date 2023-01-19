@@ -2,7 +2,7 @@
 
 ## Laravel package for better artisan commands for making Model etc.
 
-**Installation**
+## Installation
 ```shell
 composer require wamesk/laravel-commands 
 ```
@@ -24,8 +24,10 @@ project
              │  WameModel.php
              └─ WameObserver.php
 ```
+## Usage
+
 ### Make command
-This command will run all commands listed below.
+This command will run all `php artisan` commands listed below.
 
 - [wame:model](#wame-model)
 - [wame:migration](#wame-migration)
@@ -38,14 +40,20 @@ This command will run all commands listed below.
 php artisan wame:make
 ```
 
-### Model command {#wame-model}
+### Model command
 
-### Migration command {#wame-migration}
+### Migration command
 
-### Observer command {#wame-observer}
+### Observer command
 
-### Events command {#wame-events}
+### Events command
 
-### Listeners command {#wame-listeners}
+### Listeners command
 
-### Api controller command {#wame-api-controller}
+### Api controller command
+
+## Utils
+
+### Helpers
+
+### Validator
