@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Wame\ApiResponse\Helpers\ApiResponse;
 use Wame\LaravelCommands\Utils\Helpers;
+use Illuminate\Support\Pluralizer;
 
 class WameApiController extends Command
 {
@@ -32,6 +33,8 @@ class WameApiController extends Command
 
 //        $controllerFile = $version ? "Http/Controllers/" . $version ."/". $name. "Controller.php" : "Http/Controllers/". $name. "Controller.php";
         $idType = config('wame-commands.id-type', 'ulid');
+
+        $tableName = strtolower(Pluralizer::plural($name));
 
         $controllerName = $name. "Controller";
         $controllerFile = $version ? "Http\Controllers\\$version\\$controllerName.php" : "Http\Controllers\\$controllerName.php";
@@ -129,8 +132,12 @@ class WameApiController extends Command
                 "    public function show(string \$id): JsonResponse\n",
                 "    {\n",
                 "        try {\n",
+                "            \$validator = Validator::code()->validate(['id' => \$id], [\n",
+                "                'id' => 'uuid|required|exists:$tableName,id',\n",
+                "            ]);\n",
+                "            if (\$validator) return \$validator;\n",
+                "\n",
                 "            \$entity = $name::find(\$id);\n",
-                "            if (!\$entity) return ApiResponse::code()->response(404);;\n",
                 "\n",
                 "            return ApiResponse::data($resourceName::make(\$entity))->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
@@ -150,13 +157,15 @@ class WameApiController extends Command
                 "    public function update(string \$id, Request \$request): JsonResponse\n",
                 "    {\n",
                 "        try {\n",
-                "            \$validator = Validator::code()->validate(\$request->all(), [\n",
+                "            \$validate = \$request->all();",
+                "            \$validate['id'] = \$id;",
                 "\n",
+                "            \$validator = Validator::code()->validate(\$validate, [\n",
+                "                'id' => 'uuid|required|exists:$tableName,id',\n",
                 "            ]);\n",
                 "            if (\$validator) return \$validator;\n",
                 "\n",
                 "            \$entity = $name::find(\$id);\n",
-                "            if (!\$entity) return ApiResponse::code()->response(404);;\n",
                 "\n",
                 "            \$entity->update([\n",
                 "\n",
@@ -179,8 +188,12 @@ class WameApiController extends Command
                 "    public function delete(string \$id): JsonResponse\n",
                 "    {\n",
                 "        try {\n",
+                "            \$validator = Validator::code()->validate(['id' => \$id], [\n",
+                "                'id' => 'uuid|required|exists:$tableName,id',\n",
+                "            ]);\n",
+                "            if (\$validator) return \$validator;\n",
+                "\n",
                 "            \$entity = $name::find(\$id);\n",
-                "            if (!\$entity) return ApiResponse::code()->response(404);;\n",
                 "\n",
                 "            \$entity->delete();\n",
                 "\n",
