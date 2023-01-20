@@ -33,17 +33,27 @@ class WameModel extends Command
         'ulid' => "use HasUlids;\n",
     ];
 
-    protected array $sorting = [
-        true => "\n    protected array \$sortable = [\n        'order_column_name' => 'sort',\n        'sort_when_creating' => 'true',\n        'sort_on_has_many' => 'true',\n        'sort_on_belongs_to' => 'true',\n        'nova_order_by' => 'ASC',\n    ];\n",
-        false => ""
-    ];
-
     public function handle()
     {
         $name = $this->argument('name');
         $sorting = config('wame-commands.sorting', false);
         $idType = config('wame-commands.id-type', 'ulid');
         $console = $this->output;
+        $sortColumnName = config('eloquent-sortable.order_column_name', 'sort');
+
+        $sortingArray = "";
+        if ($sorting) {
+            $sortingArray = $sortingArray = implode('', [
+                "\n",
+                "    protected array \$sortable = [\n",
+                "        'order_column_name' => '$sortColumnName',\n",
+                "        'sort_when_creating' => 'true',\n",
+                "        'sort_on_has_many' => 'true',\n",
+                "        'sort_on_belongs_to' => 'true',\n",
+                "        'nova_order_by' => 'ASC',\n",
+                "    ];\n"
+            ]);
+        }
 
         Helpers::createDir('Models');
 
@@ -79,7 +89,7 @@ class WameModel extends Command
                 "        'updated_at' => 'datetime',\n",
                 "        'deleted_at' => 'datetime',\n",
                 "    ];\n",
-                $this->sorting[$sorting],
+                $sortingArray,
                 "}\n",
             ];
 
