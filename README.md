@@ -28,11 +28,11 @@ Laravel package for better artisan commands for making Model etc.
 ```shell
 composer require wamesk/laravel-commands 
 ```
-Use this command to upload command files into your project to use.
+Use this command to publish config.
 ```shell
 php artisan vendor:publish --provider="Wame\LaravelCommands\LaravelCommandsServiceProvider"
 ```
-It will also generate config file *wame-commands.php* in the config folder.
+You can find config in *config* folder as shown below.
 ```
 project
  └─ config
