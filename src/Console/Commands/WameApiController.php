@@ -26,6 +26,7 @@ class WameApiController extends Command
     public function handle()
     {
         $name = $this->argument('name');
+        $console = $this->output;
 
         $version = config('wame-commands.version', null);
 
@@ -45,8 +46,9 @@ class WameApiController extends Command
         Helpers::createDir($version ? 'Http/Controllers/'. $version:'Http/Controllers');
 
         if (file_exists(app_path("$controllerFile"))) {
-            return ['warn', __('Model :model already exist.', ['model' => $name])];
+            $console->error('Api Controller with this name already exists');
         } else {
+            $console->text('Creating Api Controller...');
             $file = Helpers::createFile($controllerFile);
             $lines = [
                 "<?php \n",
@@ -193,7 +195,7 @@ class WameApiController extends Command
             fwrite($file, implode('', $lines));
             fclose($file);
 
-            return ['info', __('Model :model has been created.', ['model' => $name])];
+            $console->info("Created Api Controller");
         }
     }
 }
