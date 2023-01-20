@@ -27,7 +27,7 @@ class WameApiController extends Command
     {
         $name = $this->argument('name');
 
-        $version = config('wame-commands.version');
+        $version = config('wame-commands.version', null);
 
 //        $controllerFile = $version ? "Http/Controllers/" . $version ."/". $name. "Controller.php" : "Http/Controllers/". $name. "Controller.php";
         $idType = config('wame-commands.id-type', 'ulid');

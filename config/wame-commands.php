@@ -1,25 +1,25 @@
 <?php
 
 return [
-    // Version of ApiController you want to develop (v1, v2, v3, null)
-    'version' => 'v1',
+    /* Version of ApiController you want to develop (v1, v2, v3, null) */
+//    'version' => 'v1', // Default: null
 
-    // ID type you want to use (id, uuid, ulid)
-    'id-type' => 'ulid',
+    /* Type of id your project is using (options: id (basic integer), uuid, ulid) */
+//    'id-type' => 'uuid', // Default: ulid
 
-    // Enable or disable sorting in migration and model
-    'sorting' => true,
+    /* Enable or disable sorting in migration and model */
+//    'sorting' => false, // Default: true
 
-    // Per page pagination default
-    'per_page' => 20,
+    /* Per page pagination default */
+//    'per_page' => 10, // Default: 10
 
-    // File that 'php artisan wame:make' command should make
+    /* You can disable commands that wame:make will run. By default, all will run. */
     'make' => [
-        'model' => true,
-        'migration' => true,
-        'observer' => true,
-        'events' => true,
-        'listeners' => true,
-        'api-controllers' => true,
+//        'model' => false,
+//        'migration' => false,
+//        'observer' => false,
+//        'events' => false,
+//        'listeners' => false,
+//        'api-controllers' => false,
     ],
 ];
