@@ -32,6 +32,7 @@ class WameMigration extends Command
     public function handle()
     {
         $modelName = $this->argument('name');
+        $console = $this->output;
 
         $tableName = Helpers::camelCaseConvert(Pluralizer::plural($modelName));
         $migrationFileName = 'create_' . $tableName . '_table';
@@ -49,6 +50,8 @@ class WameMigration extends Command
             // Wait for file to exist
             for($i=0; $i<5; $i++){if(!empty(glob(app_path('../database/migrations/*' . $migrationFileName . '.php')))){$found = true;$migrationFile= glob(app_path('../database/migrations/*' . $migrationFileName . '.php'))[0];break;} sleep(1);}
             if ($found) {
+                $console->text("Creating $migrationFileName...");
+
                 $file = fopen($migrationFile, "w");
                 $lines = [
                     "<?php \n",
@@ -90,9 +93,9 @@ class WameMigration extends Command
                 fwrite($file, implode('', $lines));
                 fclose($file);
             }
-            return ['info', __('Migration :migration has been created.', ['migration' => $migrationFileName])];
+            $console->info("Created $migrationFileName");
         } else {
-            return ['warn', __('Migration :migration already exist.', ['migration' => $migrationFileName])];
+            $console->info("$migrationFileName already exists");
         }
     }
 }

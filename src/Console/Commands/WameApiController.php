@@ -46,9 +46,9 @@ class WameApiController extends Command
         Helpers::createDir($version ? 'Http/Controllers/'. $version:'Http/Controllers');
 
         if (file_exists(app_path("$controllerFile"))) {
-            $console->error('Api Controller with this name already exists');
+            $console->info($controllerName .' already exists');
         } else {
-            $console->text('Creating Api Controller...');
+            $console->text('Creating '. $controllerName .'...');
             $file = Helpers::createFile($controllerFile);
             $lines = [
                 "<?php \n",
@@ -195,7 +195,7 @@ class WameApiController extends Command
             fwrite($file, implode('', $lines));
             fclose($file);
 
-            $console->info("Created Api Controller");
+            $console->info("Created $controllerName");
         }
     }
 }

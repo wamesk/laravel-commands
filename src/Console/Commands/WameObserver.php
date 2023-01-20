@@ -24,13 +24,16 @@ class WameObserver extends Command
     public function handle()
     {
         $modelName = $this->argument('name');
+        $console = $this->output;
+        $observerName = "{$modelName}Observer";
 
         Helpers::createDir('Observers');
 
-        if (file_exists(app_path("Observers/". $modelName ."Observer.php"))) {
-            return ['warn', __('Observer :observer already exist.', ['observer' => $modelName.'Observer'])];
+        if (file_exists(app_path("Observers/$observerName.php"))) {
+            $console->info($observerName .' already exists');
         }
 
+        $console->text('Creating '. $observerName .'...');
         $file = Helpers::createFile('Observers/'. $modelName .'Observer.php');
 
         $lines = [
@@ -143,6 +146,6 @@ class WameObserver extends Command
         fwrite($file, implode('', $lines));
         fclose($file);
 
-        return ['info', __('Observer :observer has been created.', ['observer' => $modelName.'Observer'])];
+        $console->info("Created $observerName");
     }
 }

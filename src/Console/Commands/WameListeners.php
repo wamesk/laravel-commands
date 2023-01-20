@@ -24,19 +24,24 @@ class WameListeners extends Command
     public function handle()
     {
         $modelName = $this->argument('name');
+        $console = $this->output;
 
         $events = ['Creating', 'Created', 'Deleting', 'Deleted', 'ForceDeleted', 'Restored', 'Updating', 'Updated'];
 
         Helpers::createDir('Listeners/'. $modelName);
 
         foreach ($events as $event) {
-            $suffix = 'Listener' . 'Job';
-            if (file_exists(app_path('Listeners/'. $modelName . '/' . $event .'/Run'.$modelName.$event.$suffix.'.php'))) {
-//                return ['warn', __('Listener :listener already exist.', ['listener' => 'Run'.$modelName.$event.$suffix])];
+            $listenerName = 'Run'.$modelName.$event. 'ListenerJob';
+            $listenerPath = 'Listeners/'. $modelName . '/' . $event ."/$listenerName.php";
+
+            if (file_exists(app_path($listenerPath))) {
+                $console->info($listenerName . ' already exists.');
                 continue;
             }
 
-            $file = Helpers::createFile('Listeners/'. $modelName . '/Run'.$modelName.$event.$suffix.'.php');
+            $console->text('Creating '. $listenerName . '...');
+
+            $file = Helpers::createFile('Listeners/'. $modelName . "/$listenerName.php");
 
             $lines = [
                 "<?php \n",
@@ -45,7 +50,7 @@ class WameListeners extends Command
                 "\n",
                 'use App\Events\\' . $modelName . '\\' . $modelName . $event . "Event;\n",
                 "\n",
-                "class Run$modelName" . "$event" . $suffix . "\n",
+                "class $listenerName\n",
                 "{\n",
                 "    /**\n",
                 "     * Create the event listener.\n",
@@ -72,7 +77,7 @@ class WameListeners extends Command
 
             fwrite($file, implode('', $lines));
             fclose($file);
+            $console->info("Created $listenerName");
         }
-        return ['info', __('Listener :listener has been created.', ['listener' => 'Run' . $modelName.$event.$suffix])];
     }
 }

@@ -24,17 +24,21 @@ class WameEvents extends Command
     public function handle()
     {
         $modelName = $this->argument('name');
+        $console = $this->output;
 
         $events = ['Creating', 'Created', 'Deleting', 'Deleted', 'ForceDeleted', 'Restored', 'Updating', 'Updated'];
         foreach ($events as $event) {
             $eventName = $event.'Event';
-            if (file_exists(app_path('Events/'. $modelName .'/'.$modelName.$eventName.'.php'))) {
-//                return ['warn', __('Event :event already exist.', ['event' => $modelName.$eventName])];
+            $filePath = 'Events/'. $modelName .'/'.$modelName.$eventName.'.php';
+            if (file_exists(app_path($filePath))) {
+                $console->info($modelName.$eventName . ' already exists.');
                 continue;
             }
 
+            $console->text('Creating '. $modelName.$eventName . '...');
+
             Helpers::createDir('Events/'. $modelName);
-            $file = Helpers::createFile('Events/'. $modelName .'/'.$modelName.$eventName.'.php');
+            $file = Helpers::createFile($filePath);
 
             $lines = [
                 "<?php \n",
@@ -75,7 +79,8 @@ class WameEvents extends Command
             ];
             fwrite($file, implode('', $lines));
             fclose($file);
+
+            $console->info("Created $eventName");
         }
-        return ['info', __('Event :event has been created.', ['event' => $modelName.$eventName])];
     }
 }

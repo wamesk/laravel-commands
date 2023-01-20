@@ -43,12 +43,14 @@ class WameModel extends Command
         $name = $this->argument('name');
         $sorting = config('wame-commands.sorting', false);
         $idType = config('wame-commands.id-type', 'ulid');
+        $console = $this->output;
 
         Helpers::createDir('Models');
 
         if (file_exists(app_path("Models/$name.php"))) {
-            return ['warn', __('Model :model already exist.', ['model' => $name])];
+            $console->info($name .' model already exists');
         } else {
+            $console->text('Creating '. $name .' model...');
             $file = Helpers::createFile("Models/$name.php");
             $lines = [
                 "<?php \n",
@@ -84,7 +86,7 @@ class WameModel extends Command
             fwrite($file, implode('', $lines));
             fclose($file);
 
-            return ['info', __('Model :model has been created.', ['model' => $name])];
+            $console->info("Created $name model");
         }
     }
 }
