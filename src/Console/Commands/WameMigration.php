@@ -38,7 +38,7 @@ class WameMigration extends Command
         $migrationFileName = 'create_' . $tableName . '_table';
         $migrationFile = glob(app_path('../database/migrations/*' . $migrationFileName . '.php'));
 
-        $idColumn = $this->idColumns[config('wame-commands.id-type')];
+        $idColumn = $this->idColumns[config('wame-commands.id-type', 'ulid')];
         $sorting = config('wame-commands.sorting');
 
         Helpers::createDir('../database/migrations');
@@ -71,7 +71,7 @@ class WameMigration extends Command
                     "    {\n",
                     "        Schema::create('" . $tableName . "', function (Blueprint \$table) {\n",
                     "            $idColumn;\n",
-                    $sorting ? "            \$table->unsignedInteger(config('eloquent-sortable.order_column_name', 'sort'))->nullable();\n":"",
+                    $sorting ? "            \$table->unsignedInteger(". config('eloquent-sortable.order_column_name', 'sort') .")->nullable();\n":"",
                     "            \$table->timestamps();\n",
                     "            \$table->softDeletes();\n",
                     "        });\n",
