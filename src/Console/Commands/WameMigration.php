@@ -71,7 +71,7 @@ class WameMigration extends Command
                     "    {\n",
                     "        Schema::create('" . $tableName . "', function (Blueprint \$table) {\n",
                     "            $idColumn;\n",
-                    $sorting ? "            \$table->unsignedInteger('sort')->nullable();\n":"",
+                    $sorting ? "            \$table->unsignedInteger(config('eloquent-sortable.order_column_name', 'sort'))->nullable();\n":"",
                     "            \$table->timestamps();\n",
                     "            \$table->softDeletes();\n",
                     "        });\n",
