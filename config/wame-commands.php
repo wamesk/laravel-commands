@@ -15,11 +15,12 @@ return [
 
     /* You can disable commands that wame:make will run. By default, all will run. */
     'make' => [
-//        'model' => false,
-//        'migration' => false,
-//        'observer' => false,
+//        'api-controllers' => false,
 //        'events' => false,
 //        'listeners' => false,
-//        'api-controllers' => false,
+//        'migration' => false,
+//        'model' => false,
+//        'nova' => false,
+//        'observer' => false,
     ],
 ];
