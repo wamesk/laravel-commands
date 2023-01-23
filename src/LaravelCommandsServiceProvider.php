@@ -4,13 +4,6 @@ namespace Wame\LaravelCommands;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Wame\LaravelCommands\Console\Commands\WameApiController;
-use Wame\LaravelCommands\Console\Commands\WameEvents;
-use Wame\LaravelCommands\Console\Commands\WameListeners;
-use Wame\LaravelCommands\Console\Commands\WameMake;
-use Wame\LaravelCommands\Console\Commands\WameMigration;
-use Wame\LaravelCommands\Console\Commands\WameModel;
-use Wame\LaravelCommands\Console\Commands\WameObserver;
 
 class LaravelCommandsServiceProvider extends ServiceProvider
 {
@@ -21,7 +14,7 @@ class LaravelCommandsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/wame-commands.php', 'wame-commands');
+        $this->mergeConfigFrom(__DIR__ . '/../config/wame-commands.php', 'wame-commands');
     }
 
     /**
@@ -33,28 +26,23 @@ class LaravelCommandsServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             // Export configs
-            $this->publishConfigs();
+            $this->publishes([__DIR__ . '/../config/wame-commands.php' => config_path('wame-commands.php')], 'config');
+
+            // Export Base Nova Resource
+            $this->publishes([__DIR__ . '/../app/Nova/BaseResource.php' => resource_path()], 'nova');
 
             // Registering commands
             $this->commands([
-                WameApiController::class,
-                WameEvents::class,
-                WameListeners::class,
-                WameMake::class,
-                WameMigration::class,
-                WameModel::class,
-                WameObserver::class,
+                'Wame\LaravelCommands\Console\Commands\WameApiController',
+                'Wame\LaravelCommands\Console\Commands\WameEvents',
+                'Wame\LaravelCommands\Console\Commands\WameListeners',
+                'Wame\LaravelCommands\Console\Commands\WameMake',
+                'Wame\LaravelCommands\Console\Commands\WameMigration',
+                'Wame\LaravelCommands\Console\Commands\WameModel',
+                'Wame\LaravelCommands\Console\Commands\WameNova',
+                'Wame\LaravelCommands\Console\Commands\WameObserver',
             ]);
         }
     }
 
-    /**
-     * @return void
-     */
-    private function publishConfigs(): void
-    {
-        $this->publishes([
-            __DIR__.'/../config/wame-commands.php' => config_path('wame-commands.php'),
-        ], 'config');
-    }
 }

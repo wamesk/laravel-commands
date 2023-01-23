@@ -63,6 +63,7 @@ return [
 //        'events' => false,
 //        'listeners' => false,
 //        'api-controllers' => false,
+//        'nova' => false,
     ],
 ];
 ```
