@@ -57,13 +57,13 @@ return [
 
     /* You can disable commands that wame:make will run. By default, all will run. */
     'make' => [
-//        'model' => false,
-//        'migration' => false,
-//        'observer' => false,
+//        'api-controllers' => false,
 //        'events' => false,
 //        'listeners' => false,
-//        'api-controllers' => false,
+//        'migration' => false,
+//        'model' => false,
 //        'nova' => false,
+//        'observer' => false,
     ],
 ];
 ```
@@ -73,12 +73,13 @@ return [
 ### Make command
 This command will run all `php artisan` commands listed below.
 
-- [wame:model](#model-command)
-- [wame:migration](#migration-command)
-- [wame:observer](#observer-command)
+- [wame:api-controller](#api-controller-command)
 - [wame:events](#events-command)
 - [wame:listeners](#listeners-command)
-- [wame:api-controller](#api-controller-command)
+- [wame:migration](#migration-command)
+- [wame:model](#model-command)
+- [wame:nova](#nova-resource-command)
+- [wame:observer](#observer-command)
 
 Run command with *name* parameter at the end. Name parameter is your Model name. (example: User)
 ```shell
@@ -106,7 +107,7 @@ Create Model (yes/no) [yes]:
 
 ### Model command
 
-This command will create base Model with preset classes.
+This command will create base Model with preset methods.
 
 It is configurable by these configs.
 
@@ -124,6 +125,25 @@ Run this command using
 
 ```shell
 php artisan wame:model
+```
+
+### Nova resource command
+
+This command will create base Nova resource with preset methods.
+
+It is configurable by these configs.
+
+```php
+// wame-commands.php
+
+// Will add SortableTrait and Sortable interface to class along with $sortable array config
+'sorting' => true, // Other option: false
+```
+
+Run this command using
+
+```shell
+php artisan wame:nova
 ```
 
 ### Migration command
