@@ -29,7 +29,7 @@ class LaravelCommandsServiceProvider extends ServiceProvider
             $this->publishes([__DIR__ . '/../config/wame-commands.php' => config_path('wame-commands.php')], 'config');
 
             // Export Base Nova Resource
-            $this->publishes([__DIR__ . '/../app/Nova/BaseResource.php' => resource_path('BaseResource.php')], 'nova');
+            $this->publishes([__DIR__ . '/../app/Nova/BaseResource.php' => app_path('Nova/BaseResource.php')], 'nova');
 
             // Registering commands
             $this->commands([
