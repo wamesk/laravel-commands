@@ -25,11 +25,14 @@ class LaravelCommandsServiceProvider extends ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            // Export configs
+            // Export Config
             $this->publishes([__DIR__ . '/../config/wame-commands.php' => config_path('wame-commands.php')], 'config');
 
             // Export Base Nova Resource
             $this->publishes([__DIR__ . '/../app/Nova/BaseResource.php' => app_path('Nova/BaseResource.php')], 'nova');
+
+            // Export Base model
+            $this->publishes([__DIR__ . '/../app/Models/BaseModel.php' => app_path('Models/BaseModel.php')], 'models');
 
             // Registering commands
             $this->commands([
