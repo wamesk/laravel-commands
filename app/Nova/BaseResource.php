@@ -1,53 +1,79 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Nova;
 
 use Wame\Utils\Helpers\Strings;
 
 abstract class BaseResource extends Resource
 {
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public static $perPageViaRelationship = 50;
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public static $perPageOptions = [25, 50, 100, 150, 250, 500];
 
     /**
-     * Get Reource name from class
+     * Get Resource name from class
      *
      * @return string
      */
-    public static function resourceName()
+    public static function resourceName(): string
     {
         return class_basename(static::class);
     }
 
-    /** {@inheritDoc} */
-    public static function singularLabel()
+    /**
+     * Get Resource singluar name
+     *
+     * @return string
+     */
+    public static function singular(): string
     {
-        return Strings::camelCaseConvert(static::resourceName());
+        return mb_strtolower(Strings::camelCaseConvert(static::resourceName()));
     }
 
-    /** {@inheritDoc} */
-    public static function label()
+    /**
+     * {@inheritDoc}
+     */
+    public static function singularLabel(): string
     {
-        return __(strtolower(static::singularLabel()) . '.label');
+        return __(static::singular() . '.singular');
     }
 
-    /** {@inheritdoc} */
-    public static function createButtonLabel()
+    /**
+     * {@inheritDoc}
+     */
+    public static function label(): string
     {
-        return __(strtolower(static::singularLabel()) . '.create.button');
+        return __(static::singular() . '.label');
     }
 
-    /** {@inheritdoc} */
-    public static function updateButtonLabel()
+    /**
+     * {@inheritdoc}
+     */
+    public static function createButtonLabel(): string
     {
-        return __(strtolower(static::singularLabel()) . '.update.button');
+        return __(static::singular() . '.create.button');
     }
 
-    /** {@inheritdoc} */
-    public function title()
+    /**
+     * {@inheritdoc}
+     */
+    public static function updateButtonLabel(): string
+    {
+        return __(static::singular() . '.update.button');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function title(): string
     {
         if (is_array(static::$title)) {
             $return = '';
@@ -57,7 +83,9 @@ abstract class BaseResource extends Resource
                     $val = $this;
                     foreach (explode('->', $item) as $itm) {
                         $val = $val?->{$itm};
-                        if ($val === null) break;
+                        if (null === $val) {
+                            break;
+                        }
                     }
                     $return .= $val;
                 } else {
@@ -71,5 +99,4 @@ abstract class BaseResource extends Resource
 
         return (string) data_get($this, static::$title);
     }
-
 }
