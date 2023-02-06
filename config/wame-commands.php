@@ -13,6 +13,9 @@ return [
     /* Per page pagination default */
 //    'per_page' => 10, // Default: 10
 
+    /* What language mutations should it generate. All will contain EN phrases. */
+//    'langs' => ['en'], // Default: en
+
     /* You can disable commands that wame:make will run. By default, all will run. */
     'make' => [
 //        'api-controllers' => false,

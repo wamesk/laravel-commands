@@ -38,6 +38,7 @@ class LaravelCommandsServiceProvider extends ServiceProvider
             $this->commands([
                 'Wame\LaravelCommands\Console\Commands\WameApiController',
                 'Wame\LaravelCommands\Console\Commands\WameEvents',
+                'Wame\LaravelCommands\Console\Commands\WameLang',
                 'Wame\LaravelCommands\Console\Commands\WameListeners',
                 'Wame\LaravelCommands\Console\Commands\WameMake',
                 'Wame\LaravelCommands\Console\Commands\WameMigration',

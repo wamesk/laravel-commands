@@ -55,10 +55,14 @@ return [
     /* Per page pagination default */
 //    'per_page' => 10, // Default: 10
 
+    /* What language mutations should it generate. All will contain EN phrases. */
+//    'langs' => ['en'], // Default: en
+
     /* You can disable commands that wame:make will run. By default, all will run. */
     'make' => [
 //        'api-controllers' => false,
 //        'events' => false,
+//        'lang' => false,
 //        'listeners' => false,
 //        'migration' => false,
 //        'model' => false,
@@ -75,6 +79,7 @@ This command will run all `php artisan` commands listed below.
 
 - [wame:api-controller](#api-controller-command)
 - [wame:events](#events-command)
+- [wame:lang](#lang-command)
 - [wame:listeners](#listeners-command)
 - [wame:migration](#migration-command)
 - [wame:model](#model-command)
@@ -207,6 +212,37 @@ Run this command using
 
 ```shell
 php artisan wame:api-controller
+```
+
+### Lang command
+
+This command will create language files according to the languages defined in the config.
+
+```php
+/* What language mutations should it generate. All will contain EN phrases. */
+'langs' => ['en'], // Default: en
+```
+
+Output
+```php
+<?php 
+
+return [
+    'label' => 'Users',
+    'plural' => 'Users',
+    'singular' => 'User',
+    'detail' => 'User: :title',
+
+    'create.button' => 'Create user',
+    'update.button' => 'Update user',
+
+];
+```
+
+Run this command using
+
+```shell
+php artisan wame:lang
 ```
 
 ## Utils
