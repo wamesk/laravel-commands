@@ -29,6 +29,7 @@ class WameMake extends Command
         'listeners',
         'api-controller',
         'nova',
+        'lang',
     ];
 
     protected array $commandLabels = [
@@ -39,6 +40,7 @@ class WameMake extends Command
         'listeners' => 'Listeners',
         'api-controller' => 'Api Controller and Resource',
         'nova' => 'Nova resource',
+        'lang' => 'Language',
     ];
 
     public function handle()

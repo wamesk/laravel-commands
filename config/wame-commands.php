@@ -20,6 +20,7 @@ return [
     'make' => [
 //        'api-controllers' => false,
 //        'events' => false,
+//        'lang' => false,
 //        'listeners' => false,
 //        'migration' => false,
 //        'model' => false,
