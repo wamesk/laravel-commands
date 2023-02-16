@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -29,7 +31,7 @@ class WameMigration extends Command
         'ulid' => '$table->ulid(\'id\')->primary()',
     ];
 
-    public function handle()
+    public function handle(): void
     {
         $modelName = $this->argument('name');
         $console = $this->output;
@@ -48,11 +50,18 @@ class WameMigration extends Command
 
             $found = false;
             // Wait for file to exist
-            for($i=0; $i<5; $i++){if(!empty(glob(app_path('../database/migrations/*' . $migrationFileName . '.php')))){$found = true;$migrationFile= glob(app_path('../database/migrations/*' . $migrationFileName . '.php'))[0];break;} sleep(1);}
-            if ($found) {
-                $console->text("Creating $migrationFileName...");
+            for ($i=0; $i<5; $i++) {
+                if (!empty(glob(app_path('../database/migrations/*' . $migrationFileName . '.php')))) {
+                    $found = true;
+                    $migrationFile= glob(app_path('../database/migrations/*' . $migrationFileName . '.php'))[0];
+                    break;
+                } sleep(1);
+            }
 
-                $file = fopen($migrationFile, "w");
+            if ($found) {
+                $console->text("Creating {$migrationFileName}...");
+
+                $file = fopen($migrationFile, 'w');
                 $lines = [
                     "<?php \n",
                     "\n",
@@ -70,8 +79,8 @@ class WameMigration extends Command
                     "    public function up()\n",
                     "    {\n",
                     "        Schema::create('" . $tableName . "', function (Blueprint \$table) {\n",
-                    "            $idColumn;\n",
-                    $sorting ? "            \$table->unsignedInteger('". config('eloquent-sortable.order_column_name', 'sort') ."')->nullable();\n":"",
+                    "            {$idColumn};\n",
+                    $sorting ? "            \$table->unsignedInteger('" . config('eloquent-sortable.order_column_name', 'sort') . "')->nullable();\n" : '',
                     "            \$table->timestamps();\n",
                     "            \$table->softDeletes();\n",
                     "        });\n",
@@ -93,9 +102,9 @@ class WameMigration extends Command
                 fwrite($file, implode('', $lines));
                 fclose($file);
             }
-            $console->info("Created $migrationFileName");
+            $console->info("Created {$migrationFileName}");
         } else {
-            $console->info("$migrationFileName already exists");
+            $console->info("{$migrationFileName} already exists");
         }
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class LaravelCommandsServiceProvider extends ServiceProvider
@@ -12,7 +13,7 @@ class LaravelCommandsServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/wame-commands.php', 'wame-commands');
     }
@@ -22,7 +23,7 @@ class LaravelCommandsServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             // Export Config
@@ -48,5 +49,4 @@ class LaravelCommandsServiceProvider extends ServiceProvider
             ]);
         }
     }
-
 }

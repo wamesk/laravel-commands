@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Wame\ApiResponse\Helpers\ApiResponse;
-use Wame\LaravelCommands\Utils\Helpers;
 use Illuminate\Support\Pluralizer;
+use Wame\LaravelCommands\Utils\Helpers;
 
 class WameApiController extends Command
 {
@@ -24,34 +25,34 @@ class WameApiController extends Command
      */
     protected $description = 'Create api controller';
 
-    public function handle()
+    public function handle(): void
     {
         $name = $this->argument('name');
         $console = $this->output;
 
         $version = config('wame-commands.version', null);
 
-//        $controllerFile = $version ? "Http/Controllers/" . $version ."/". $name. "Controller.php" : "Http/Controllers/". $name. "Controller.php";
+        // $controllerFile = $version ? "Http/Controllers/" . $version ."/". $name. "Controller.php" : "Http/Controllers/". $name. "Controller.php";
         $idType = config('wame-commands.id-type', 'ulid');
 
-        $tableName = strtolower(Pluralizer::plural($name));
+        $tableName = mb_strtolower(Pluralizer::plural($name));
 
-        $controllerName = $name. "Controller";
-        $controllerFile = $version ? "Http\Controllers\\$version\\$controllerName.php" : "Http\Controllers\\$controllerName.php";
+        $controllerName = $name . 'Controller';
+        $controllerFile = $version ? "Http\Controllers\\{$version}\\{$controllerName}.php" : "Http\Controllers\\{$controllerName}.php";
 
-        $resourceName = $name .'Resource';
-        $resourcePathName = $version ? $version ."\\". $resourceName : $resourceName;
+        $resourceName = $name . 'Resource';
+        $resourcePathName = $version ? $version . '\\' . $resourceName : $resourceName;
 
-        $namespace = $version ? "namespace App\Http\Controllers\\". $version .";\n" : "namespace App\Http\Controllers;\n";
+        $namespace = $version ? "namespace App\Http\Controllers\\" . $version . ";\n" : "namespace App\Http\Controllers;\n";
 
-        Artisan::call($version ? "make:resource $version/{$name}Resource" : "make:resource {$name}Resource");
+        Artisan::call($version ? "make:resource {$version}/{$name}Resource" : "make:resource {$name}Resource");
 
-        Helpers::createDir($version ? 'Http/Controllers/'. $version:'Http/Controllers');
+        Helpers::createDir($version ? 'Http/Controllers/' . $version : 'Http/Controllers');
 
-        if (file_exists(app_path("$controllerFile"))) {
-            $console->info($controllerName .' already exists');
+        if (file_exists(app_path("{$controllerFile}"))) {
+            $console->info($controllerName . ' already exists');
         } else {
-            $console->text('Creating '. $controllerName .'...');
+            $console->text('Creating ' . $controllerName . '...');
             $file = Helpers::createFile($controllerFile);
             $lines = [
                 "<?php \n",
@@ -59,8 +60,8 @@ class WameApiController extends Command
                 $namespace,
                 "\n",
                 "use App\Http\Controllers\Controller;\n",
-                "use App\Http\Resources\\$resourcePathName;\n",
-                "use App\Models\\$name;\n",
+                "use App\Http\Resources\\{$resourcePathName};\n",
+                "use App\Models\\{$name};\n",
                 "use Illuminate\Http\JsonResponse;\n",
                 "use Illuminate\Http\Request;\n",
                 "use Illuminate\Support\Facades\DB;\n",
@@ -68,15 +69,15 @@ class WameApiController extends Command
                 "use Wame\LaravelCommands\Utils\Validator;\n",
                 "\n",
                 "/**\n",
-                " * @group $name\n",
+                " * @group {$name}\n",
                 " */\n",
-                "class $controllerName extends Controller\n",
+                "class {$controllerName} extends Controller\n",
                 "{\n",
                 "    /**\n",
-                "     * GET $name index\n",
+                "     * GET {$name} index\n",
                 "     *\n",
-                "     * @bodyParam per_page int Pagination per page Example: 20\n",
                 "     * @bodyParam page int Pagination page Example: 1\n",
+                "     * @bodyParam per_page int Pagination per page Example: 20\n",
                 "     *\n",
                 "     * @param Request \$request\n",
                 "     * @return JsonResponse\n",
@@ -85,23 +86,23 @@ class WameApiController extends Command
                 "    {\n",
                 "        try {\n",
                 "            \$validator = Validator::code()->validate(\$request->all(), [\n",
-                "                'per_page' => 'integer|min:1'\n",
                 "                'page' => 'integer|min:1'\n",
+                "                'per_page' => 'integer|min:1'\n",
                 "            ]);\n",
                 "            if (\$validator) return \$validator;\n",
                 "\n",
                 "            \$perPage = \$request->get('per_page', config('wame-commands.per_page', 20));\n",
                 "\n",
-                "            \$data = $name::paginate(\$perPage);\n",
+                "            \$data = {$name}::paginate(\$perPage);\n",
                 "\n",
-                "            return ApiResponse::collection(\$data, ". $resourceName ."::class)->code()->response();\n",
+                '            return ApiResponse::collection($data, ' . $resourceName . "::class)->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(500);\n",
                 "        }\n",
                 "    }\n",
                 "\n",
                 "    /**\n",
-                "     * POST $name store\n",
+                "     * POST {$name} store\n",
                 "     *\n",
                 "     * @param Request \$request\n",
                 "     * @return JsonResponse\n",
@@ -116,13 +117,13 @@ class WameApiController extends Command
                 "\n",
                 "            DB::beginTransaction();\n",
                 "\n",
-                "            \$entity = $name::create([\n",
+                "            \$entity = {$name}::create([\n",
                 "\n",
                 "            ]);\n",
                 "\n",
                 "            DB::commit();\n",
                 "\n",
-                "            return ApiResponse::data($resourceName::make(\$entity))->code()->response(201);\n",
+                "            return ApiResponse::data({$resourceName}::make(\$entity))->code()->response(201);\n",
                 "        } catch (\Exception \$e) {\n",
                 "            DB::rollBack();\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(500);\n",
@@ -130,9 +131,9 @@ class WameApiController extends Command
                 "    }\n",
                 "\n",
                 "    /**\n",
-                "     * GET $name show\n",
+                "     * GET {$name} show\n",
                 "     *\n",
-                "     * @urlParam id $idType required $name id Example: 9840ac0b-089e-433b-975a-5a6b58885e29\n",
+                "     * @urlParam id {$idType} required {$name} id Example: 01gsa40bvafp2tewxh67bbphw2\n",
                 "     *\n",
                 "     * @param string \$id\n",
                 "     * @return JsonResponse\n",
@@ -141,22 +142,22 @@ class WameApiController extends Command
                 "    {\n",
                 "        try {\n",
                 "            \$validator = Validator::code()->validate(['id' => \$id], [\n",
-                "                'id' => '$idType|required|exists:$tableName,id,deleted_at,NULL',\n",
+                "                'id' => '{$idType}|required|exists:{$tableName},id,deleted_at,NULL',\n",
                 "            ]);\n",
                 "            if (\$validator) return \$validator;\n",
                 "\n",
-                "            \$entity = $name::find(\$id);\n",
+                "            \$entity = {$name}::find(\$id);\n",
                 "\n",
-                "            return ApiResponse::data($resourceName::make(\$entity))->code()->response();\n",
+                "            return ApiResponse::data({$resourceName}::make(\$entity))->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(500);\n",
                 "        }\n",
                 "    }\n",
                 "\n",
                 "    /**\n",
-                "     * PUT $name update\n",
+                "     * PUT {$name} update\n",
                 "     *\n",
-                "     * @urlParam id $idType required $name id Example: 9840ac0b-089e-433b-975a-5a6b58885e29\n",
+                "     * @urlParam id {$idType} required {$name} id Example: 01gsa40bvafp2tewxh67bbphw2\n",
                 "     *\n",
                 "     * @param string \$id\n",
                 "     * @param Request \$request\n",
@@ -169,11 +170,11 @@ class WameApiController extends Command
                 "            \$validate['id'] = \$id;\n",
                 "\n",
                 "            \$validator = Validator::code()->validate(\$validate, [\n",
-                "                'id' => '$idType|required|exists:$tableName,id,deleted_at,NULL',\n",
+                "                'id' => '{$idType}|required|exists:{$tableName},id,deleted_at,NULL',\n",
                 "            ]);\n",
                 "            if (\$validator) return \$validator;\n",
                 "\n",
-                "            \$entity = $name::find(\$id);\n",
+                "            \$entity = {$name}::find(\$id);\n",
                 "\n",
                 "            DB::beginTransaction();\n",
                 "\n",
@@ -183,7 +184,7 @@ class WameApiController extends Command
                 "\n",
                 "            DB::commit();\n",
                 "\n",
-                "            return ApiResponse::data($resourceName::make(\$entity))->code()->response();\n",
+                "            return ApiResponse::data({$resourceName}::make(\$entity))->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            DB::rollBack();\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(500);\n",
@@ -191,9 +192,9 @@ class WameApiController extends Command
                 "    }\n",
                 "\n",
                 "    /**\n",
-                "     * DELETE $name delete\n",
+                "     * DELETE {$name} delete\n",
                 "     *\n",
-                "     * @urlParam id $idType required $name id Example: 9840ac0b-089e-433b-975a-5a6b58885e29\n",
+                "     * @urlParam id {$idType} required {$name} id Example: 01gsa40bvafp2tewxh67bbphw2\n",
                 "     *\n",
                 "     * @param string \$id\n",
                 "     * @return JsonResponse\n",
@@ -202,18 +203,18 @@ class WameApiController extends Command
                 "    {\n",
                 "        try {\n",
                 "            \$validator = Validator::code()->validate(['id' => \$id], [\n",
-                "                'id' => '$idType|required|exists:$tableName,id,deleted_at,NULL',\n",
+                "                'id' => '{$idType}|required|exists:{$tableName},id,deleted_at,NULL',\n",
                 "            ]);\n",
                 "            if (\$validator) return \$validator;\n",
                 "\n",
                 "            DB::beginTransaction();\n",
                 "\n",
-                "            \$entity = $name::find(\$id);\n",
+                "            \$entity = {$name}::find(\$id);\n",
                 "            \$entity->delete();\n",
                 "\n",
                 "            DB::commit();\n",
                 "\n",
-                "            return ApiResponse::data($resourceName::make(\$entity))->code()->response();\n",
+                "            return ApiResponse::data({$resourceName}::make(\$entity))->code()->response();\n",
                 "        } catch (\Exception \$e) {\n",
                 "            DB::rollBack();\n",
                 "            return ApiResponse::code()->message(\$e->getMessage())->response(500);\n",
@@ -225,7 +226,7 @@ class WameApiController extends Command
             fwrite($file, implode('', $lines));
             fclose($file);
 
-            $console->info("Created $controllerName");
+            $console->info("Created {$controllerName}");
         }
     }
 }

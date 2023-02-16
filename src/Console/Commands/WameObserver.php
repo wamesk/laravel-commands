@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -21,7 +23,7 @@ class WameObserver extends Command
      */
     protected $description = 'Create observer';
 
-    public function handle()
+    public function handle(): void
     {
         $modelName = $this->argument('name');
         $console = $this->output;
@@ -29,12 +31,12 @@ class WameObserver extends Command
 
         Helpers::createDir('Observers');
 
-        if (file_exists(app_path("Observers/$observerName.php"))) {
-            $console->info($observerName .' already exists');
+        if (file_exists(app_path("Observers/{$observerName}.php"))) {
+            $console->info($observerName . ' already exists');
         }
 
-        $console->text('Creating '. $observerName .'...');
-        $file = Helpers::createFile('Observers/'. $modelName .'Observer.php');
+        $console->text('Creating ' . $observerName . '...');
+        $file = Helpers::createFile('Observers/' . $modelName . 'Observer.php');
 
         $lines = [
             "<?php \n",
@@ -51,94 +53,94 @@ class WameObserver extends Command
             'use App\Events\\' . $modelName . '\\' . $modelName . "UpdatedEvent;\n",
             'use App\Models\\' . $modelName . ";\n",
             "\n",
-            "class $modelName" . "Observer\n",
+            "class {$modelName}" . "Observer\n",
             "{\n",
             "    /**\n",
             '     * Handle the ' . $modelName . ' "creating" event.' . "\n",
             "     *\n",
-            "     * @param \App\Models\\". $modelName . " \$entity\n",
+            "     * @param \App\Models\\" . $modelName . " \$entity\n",
             "     * @return void\n",
             "     */\n",
-            "    public function creating(" . $modelName . " \$entity)\n",
+            '    public function creating(' . $modelName . " \$entity)\n",
             "    {\n",
-            "        " . $modelName . "CreatingEvent::dispatch(\$entity);" . "\n",
+            '        ' . $modelName . 'CreatingEvent::dispatch($entity);' . "\n",
             "    }\n",
             "\n",
             "    /**\n",
             '     * Handle the ' . $modelName . ' "created" event.' . "\n",
             "     *\n",
-            "     * @param \App\Models\\". $modelName . " \$entity\n",
+            "     * @param \App\Models\\" . $modelName . " \$entity\n",
             "     * @return void\n",
             "     */\n",
-            "    public function created(" . $modelName . " \$entity)\n",
+            '    public function created(' . $modelName . " \$entity)\n",
             "    {\n",
-            "        " . $modelName . "CreatedEvent::dispatch(\$entity);" . "\n",
+            '        ' . $modelName . 'CreatedEvent::dispatch($entity);' . "\n",
             "    }\n",
             "\n",
             "    /**\n",
             '     * Handle the ' . $modelName . ' "updating" event.' . "\n",
             "     *\n",
-            "     * @param \App\Models\\". $modelName . " \$entity\n",
+            "     * @param \App\Models\\" . $modelName . " \$entity\n",
             "     * @return void\n",
             "     */\n",
-            "    public function updating(" . $modelName . " \$entity)\n",
+            '    public function updating(' . $modelName . " \$entity)\n",
             "    {\n",
-            "        " . $modelName . "UpdatingEvent::dispatch(\$entity);" . "\n",
+            '        ' . $modelName . 'UpdatingEvent::dispatch($entity);' . "\n",
             "    }\n",
             "\n",
             "    /**\n",
             '     * Handle the ' . $modelName . ' "updated" event.' . "\n",
             "     *\n",
-            "     * @param \App\Models\\". $modelName . " \$entity\n",
+            "     * @param \App\Models\\" . $modelName . " \$entity\n",
             "     * @return void\n",
             "     */\n",
-            "    public function updated(" . $modelName . " \$entity)\n",
+            '    public function updated(' . $modelName . " \$entity)\n",
             "    {\n",
-            "        " . $modelName . "UpdatedEvent::dispatch(\$entity);" . "\n",
+            '        ' . $modelName . 'UpdatedEvent::dispatch($entity);' . "\n",
             "    }\n",
             "\n",
             "    /**\n",
             '     * Handle the ' . $modelName . ' "deleting" event.' . "\n",
             "     *\n",
-            "     * @param \App\Models\\". $modelName . " \$entity\n",
+            "     * @param \App\Models\\" . $modelName . " \$entity\n",
             "     * @return void\n",
             "     */\n",
-            "    public function deleting(" . $modelName . " \$entity)\n",
+            '    public function deleting(' . $modelName . " \$entity)\n",
             "    {\n",
-            "        " . $modelName . "DeletingEvent::dispatch(\$entity);" . "\n",
+            '        ' . $modelName . 'DeletingEvent::dispatch($entity);' . "\n",
             "    }\n",
             "\n",
             "    /**\n",
             '     * Handle the ' . $modelName . ' "deleted" event.' . "\n",
             "     *\n",
-            "     * @param \App\Models\\". $modelName . " \$entity\n",
+            "     * @param \App\Models\\" . $modelName . " \$entity\n",
             "     * @return void\n",
             "     */\n",
-            "    public function deleted(" . $modelName . " \$entity)\n",
+            '    public function deleted(' . $modelName . " \$entity)\n",
             "    {\n",
-            "        " . $modelName . "DeletedEvent::dispatch(\$entity);" . "\n",
+            '        ' . $modelName . 'DeletedEvent::dispatch($entity);' . "\n",
             "    }\n",
             "\n",
             "    /**\n",
             '     * Handle the ' . $modelName . ' "restored" event.' . "\n",
             "     *\n",
-            "     * @param \App\Models\\". $modelName . " \$entity\n",
+            "     * @param \App\Models\\" . $modelName . " \$entity\n",
             "     * @return void\n",
             "     */\n",
-            "    public function restored(" . $modelName . " \$entity)\n",
+            '    public function restored(' . $modelName . " \$entity)\n",
             "    {\n",
-            "        " . $modelName . "RestoredEvent::dispatch(\$entity);" . "\n",
+            '        ' . $modelName . 'RestoredEvent::dispatch($entity);' . "\n",
             "    }\n",
             "\n",
             "    /**\n",
             '     * Handle the ' . $modelName . ' "force deleted" event.' . "\n",
             "     *\n",
-            "     * @param \App\Models\\". $modelName . " \$entity\n",
+            "     * @param \App\Models\\" . $modelName . " \$entity\n",
             "     * @return void\n",
             "     */\n",
-            "    public function forceDeleted(" . $modelName . " \$entity)\n",
+            '    public function forceDeleted(' . $modelName . " \$entity)\n",
             "    {\n",
-            "        " . $modelName . "ForceDeletedEvent::dispatch(\$entity);" . "\n",
+            '        ' . $modelName . 'ForceDeletedEvent::dispatch($entity);' . "\n",
             "    }\n",
             "}\n",
         ];
@@ -146,6 +148,6 @@ class WameObserver extends Command
         fwrite($file, implode('', $lines));
         fclose($file);
 
-        $console->info("Created $observerName");
+        $console->info("Created {$observerName}");
     }
 }

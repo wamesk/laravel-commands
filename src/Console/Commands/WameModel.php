@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -22,18 +24,18 @@ class WameModel extends Command
     protected $description = 'Create model';
 
     protected array $paths = [
-        'id' => "",
+        'id' => '',
         'uuid' => "use Illuminate\Database\Eloquent\Concerns\HasUuids;\n",
         'ulid' => "use Illuminate\Database\Eloquent\Concerns\HasUlids;\n",
     ];
 
     protected array $uses = [
-        'id' => "",
+        'id' => '',
         'uuid' => "use HasUuids;\n",
         'ulid' => "use HasUlids;\n",
     ];
 
-    public function handle()
+    public function handle(): void
     {
         $name = $this->argument('name');
         $sorting = config('wame-commands.sorting', false);
@@ -41,27 +43,27 @@ class WameModel extends Command
         $console = $this->output;
         $sortColumnName = config('eloquent-sortable.order_column_name', 'sort');
 
-        $sortingArray = "";
+        $sortingArray = '';
         if ($sorting) {
             $sortingArray = $sortingArray = implode('', [
                 "\n",
                 "    protected array \$sortable = [\n",
-                "        'order_column_name' => '$sortColumnName',\n",
+                "        'order_column_name' => '{$sortColumnName}',\n",
                 "        'sort_when_creating' => 'true',\n",
                 "        'sort_on_has_many' => 'true',\n",
                 "        'sort_on_belongs_to' => 'true',\n",
                 "        'nova_order_by' => 'ASC',\n",
-                "    ];\n"
+                "    ];\n",
             ]);
         }
 
         Helpers::createDir('Models');
 
-        if (file_exists(app_path("Models/$name.php"))) {
-            $console->info($name .' model already exists');
+        if (file_exists(app_path("Models/{$name}.php"))) {
+            $console->info($name . ' model already exists');
         } else {
-            $console->text('Creating '. $name .' model...');
-            $file = Helpers::createFile("Models/$name.php");
+            $console->text('Creating ' . $name . ' model...');
+            $file = Helpers::createFile("Models/{$name}.php");
             $lines = [
                 "<?php \n",
                 "\n",
@@ -69,15 +71,15 @@ class WameModel extends Command
                 "\n",
                 $this->paths[$idType],
                 "use Illuminate\Database\Eloquent\SoftDeletes;\n",
-                $sorting ? "use Spatie\EloquentSortable\Sortable;\n":"",
-                $sorting ? "use Spatie\EloquentSortable\SortableTrait;\n":"",
+                $sorting ? "use Spatie\EloquentSortable\Sortable;\n" : '',
+                $sorting ? "use Spatie\EloquentSortable\SortableTrait;\n" : '',
                 "\n",
-                "class $name extends BaseModel",
-                $sorting ? " implements Sortable":"",
+                "class {$name} extends BaseModel",
+                $sorting ? ' implements Sortable' : '',
                 "\n{\n",
                 "    use SoftDeletes;\n",
-                $sorting ? "    use SortableTrait;\n":"",
-                "    " . $this->uses[$idType],
+                $sorting ? "    use SortableTrait;\n" : '',
+                '    ' . $this->uses[$idType],
                 "\n",
                 "    protected \$guarded = ['id'];\n",
                 "\n",
@@ -93,7 +95,7 @@ class WameModel extends Command
             fwrite($file, implode('', $lines));
             fclose($file);
 
-            $console->info("Created $name model");
+            $console->info("Created {$name} model");
         }
     }
 }

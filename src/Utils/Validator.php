@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands\Utils;
 
 use Wame\ApiResponse\Helpers\ApiResponse;
@@ -31,7 +33,7 @@ class Validator
         static::$code = $code;
         static::$prefix = $prefix;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -42,7 +44,7 @@ class Validator
     {
         static::$statusCode = $statusCode;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -57,14 +59,14 @@ class Validator
         if ($validator->fails()) {
             $errors = $validator->messages()->toArray();
             $errorText = 'Validation has :number ';
-            $errorText .= count($errors)>1 ? 'errors':'error';
+            $errorText .= count($errors)>1 ? 'errors' : 'error';
 
             return ApiResponse::errors($validator->messages()->toArray())
                 ->code(static::$code, static::$prefix)
                 ->message(__($errorText, ['number' => count($errors)]))
                 ->response(static::$statusCode);
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types = 1);
 
 namespace Wame\LaravelCommands\Utils;
 
@@ -39,14 +41,15 @@ class Helpers
      *
      * @return string
      */
-
     public static function camelCaseConvert(string $string, string $separator = '_', bool $lower = true): string
     {
-        if (empty($string)) return $string;
+        if (empty($string)) {
+            return $string;
+        }
 
         $string = lcfirst($string);
-        $string = preg_replace("/[A-Z]/", $separator . "$0", $string);
+        $string = preg_replace('/[A-Z]/', $separator . '$0', $string);
 
-        return $lower ? strtolower($string) : $string;
+        return $lower ? mb_strtolower($string) : $string;
     }
 }

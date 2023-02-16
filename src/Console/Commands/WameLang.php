@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Pluralizer;
-use Outl1ne\NovaSortable\Traits\HasSortableRows;
 use Wame\LaravelCommands\Utils\Helpers;
 use Wame\Utils\Helpers\Dir;
-use Wame\Utils\Helpers\File;
 
 class WameLang extends Command
 {
@@ -25,7 +25,7 @@ class WameLang extends Command
      */
     protected $description = 'Create lang file';
 
-    public function handle()
+    public function handle(): void
     {
         $langs = config('wame-commands.langs', ['en']);
 
@@ -36,26 +36,26 @@ class WameLang extends Command
         $plural = Pluralizer::plural($singularUc);
 
         foreach ($langs as $lang) {
-            if (file_exists(resource_path("lang/$lang/$name2.php"))) {
-                $this->output->info("./resources/lang/$lang/$name2.php lang already exists");
+            if (file_exists(resource_path("lang/{$lang}/{$name2}.php"))) {
+                $this->output->info("./resources/lang/{$lang}/{$name2}.php lang already exists");
             } else {
-                $this->output->text("Creating ./resources/lang/$lang/$name2.php lang...");
+                $this->output->text("Creating ./resources/lang/{$lang}/{$name2}.php lang...");
 
-                $dir = resource_path("lang/$lang");
+                $dir = resource_path("lang/{$lang}");
                 Dir::createDir($dir);
-                $file = fopen($dir . "/$name2.php", 'w');
+                $file = fopen($dir . "/{$name2}.php", 'w');
 
                 $lines = [
                     "<?php \n",
                     "\n",
                     "return [\n",
-                    "    'label' => '$plural',\n",
-                    "    'plural' => '$plural',\n",
-                    "    'singular' => '$singularUc',\n",
-                    "    'detail' => '$singularUc: :title',\n",
+                    "    'label' => '{$plural}',\n",
+                    "    'plural' => '{$plural}',\n",
+                    "    'singular' => '{$singularUc}',\n",
+                    "    'detail' => '{$singularUc}: :title',\n",
                     "\n",
-                    "    'create.button' => 'Create $singular',\n",
-                    "    'update.button' => 'Update $singular',\n",
+                    "    'create.button' => 'Create {$singular}',\n",
+                    "    'update.button' => 'Update {$singular}',\n",
                     "\n",
                     "];\n",
                 ];
@@ -63,7 +63,7 @@ class WameLang extends Command
                 fwrite($file, implode('', $lines));
                 fclose($file);
 
-                $this->output->info("Created ./resources/lang/$lang/$name2.php lang");
+                $this->output->info("Created ./resources/lang/{$lang}/{$name2}.php lang");
             }
         }
     }

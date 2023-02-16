@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -21,29 +23,29 @@ class WameEvents extends Command
      */
     protected $description = 'Create events';
 
-    public function handle()
+    public function handle(): void
     {
         $modelName = $this->argument('name');
         $console = $this->output;
 
         $events = ['Creating', 'Created', 'Deleting', 'Deleted', 'ForceDeleted', 'Restored', 'Updating', 'Updated'];
         foreach ($events as $event) {
-            $eventName = $event.'Event';
-            $filePath = 'Events/'. $modelName .'/'.$modelName.$eventName.'.php';
+            $eventName = $event . 'Event';
+            $filePath = 'Events/' . $modelName . '/' . $modelName . $eventName . '.php';
             if (file_exists(app_path($filePath))) {
-                $console->info($modelName.$eventName . ' already exists.');
+                $console->info($modelName . $eventName . ' already exists.');
                 continue;
             }
 
-            $console->text('Creating '. $modelName.$eventName . '...');
+            $console->text('Creating ' . $modelName . $eventName . '...');
 
-            Helpers::createDir('Events/'. $modelName);
+            Helpers::createDir('Events/' . $modelName);
             $file = Helpers::createFile($filePath);
 
             $lines = [
                 "<?php \n",
                 "\n",
-                "namespace App\Events\\". $modelName .";\n",
+                "namespace App\Events\\" . $modelName . ";\n",
                 "\n",
                 'use App\Models\\' . $modelName . ";\n",
                 "use Illuminate\Broadcasting\InteractsWithSockets;\n",
@@ -51,7 +53,7 @@ class WameEvents extends Command
                 "use Illuminate\Foundation\Events\Dispatchable;\n",
                 "use Illuminate\Queue\SerializesModels;\n",
                 "\n",
-                "class $modelName" . "$eventName\n",
+                "class {$modelName}" . "{$eventName}\n",
                 "{\n",
                 "    use Dispatchable;\n",
                 "    use InteractsWithSockets;\n",
@@ -63,7 +65,7 @@ class WameEvents extends Command
                 "     * @return void\n",
                 "     */\n",
                 "    public function __construct(\n",
-                "        public " . $modelName . " \$entity\n",
+                '        public ' . $modelName . " \$entity\n",
                 "    ) { }\n",
                 "\n",
                 "    /**\n",
@@ -80,7 +82,7 @@ class WameEvents extends Command
             fwrite($file, implode('', $lines));
             fclose($file);
 
-            $console->info("Created $eventName");
+            $console->info("Created {$eventName}");
         }
     }
 }

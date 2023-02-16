@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -21,36 +23,36 @@ class WameListeners extends Command
      */
     protected $description = 'Create listeners';
 
-    public function handle()
+    public function handle(): void
     {
         $modelName = $this->argument('name');
         $console = $this->output;
 
         $events = ['Creating', 'Created', 'Deleting', 'Deleted', 'ForceDeleted', 'Restored', 'Updating', 'Updated'];
 
-        Helpers::createDir('Listeners/'. $modelName);
+        Helpers::createDir('Listeners/' . $modelName);
 
         foreach ($events as $event) {
-            $listenerName = 'Run'.$modelName.$event. 'ListenerJob';
-            $listenerPath = 'Listeners/'. $modelName . '/' . $event ."/$listenerName.php";
+            $listenerName = 'Run' . $modelName . $event . 'ListenerJob';
+            $listenerPath = 'Listeners/' . $modelName . '/' . $event . "/{$listenerName}.php";
 
             if (file_exists(app_path($listenerPath))) {
                 $console->info($listenerName . ' already exists.');
                 continue;
             }
 
-            $console->text('Creating '. $listenerName . '...');
+            $console->text('Creating ' . $listenerName . '...');
 
-            $file = Helpers::createFile('Listeners/'. $modelName . "/$listenerName.php");
+            $file = Helpers::createFile('Listeners/' . $modelName . "/{$listenerName}.php");
 
             $lines = [
                 "<?php \n",
                 "\n",
-                "namespace App\Listeners\\". $modelName . ";\n",
+                "namespace App\Listeners\\" . $modelName . ";\n",
                 "\n",
                 'use App\Events\\' . $modelName . '\\' . $modelName . $event . "Event;\n",
                 "\n",
-                "class $listenerName\n",
+                "class {$listenerName}\n",
                 "{\n",
                 "    /**\n",
                 "     * Create the event listener.\n",
@@ -65,10 +67,10 @@ class WameListeners extends Command
                 "    /**\n",
                 "     * Handle the event.\n",
                 "     *\n",
-                "     * @param ". $modelName . $event.'Event' . " " . '$event' ."\n",
+                '     * @param ' . $modelName . $event . 'Event' . ' ' . '$event' . "\n",
                 "     * @return void\n",
                 "     */\n",
-                "    public function handle(" . $modelName.$event.'Event' . ' $event' . ")\n",
+                '    public function handle(' . $modelName . $event . 'Event' . ' $event' . ")\n",
                 "    {\n",
                 "\n",
                 "    }\n",
@@ -77,7 +79,7 @@ class WameListeners extends Command
 
             fwrite($file, implode('', $lines));
             fclose($file);
-            $console->info("Created $listenerName");
+            $console->info("Created {$listenerName}");
         }
     }
 }

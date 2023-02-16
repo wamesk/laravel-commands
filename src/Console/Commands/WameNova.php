@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
-use Outl1ne\NovaSortable\Traits\HasSortableRows;
 use Wame\LaravelCommands\Utils\Helpers;
 
 class WameNova extends Command
@@ -22,20 +23,20 @@ class WameNova extends Command
      */
     protected $description = 'Create Nova resource';
 
-    public function handle()
+    public function handle(): void
     {
         $name = $this->argument('name');
         $name2 = Helpers::camelCaseConvert($name);
         $console = $this->output;
 
-        if (file_exists(app_path("Nova/$name.php"))) {
-            $console->info($name .' Nova resource already exists');
+        if (file_exists(app_path("Nova/{$name}.php"))) {
+            $console->info($name . ' Nova resource already exists');
         } else {
             $console->text('Creating ' . $name . ' Nova resource...');
-            $file = Helpers::createFile("Nova/$name.php");
+            $file = Helpers::createFile("Nova/{$name}.php");
 
-            $useSortableRows = config('wame-commands.sorting', false) ? "use Outl1ne\NovaSortable\Traits\HasSortableRows;\n" : "";
-            $hasSortableRows = config('wame-commands.sorting', false) ? "    use HasSortableRows;\n" : "";
+            $useSortableRows = config('wame-commands.sorting', false) ? "use Outl1ne\NovaSortable\Traits\HasSortableRows;\n" : '';
+            $hasSortableRows = config('wame-commands.sorting', false) ? "    use HasSortableRows;\n" : '';
 
             $lines = [
                 "<?php \n",
@@ -49,7 +50,7 @@ class WameNova extends Command
                 "use Laravel\Nova\Http\Requests\NovaRequest;\n",
                 $useSortableRows,
                 "\n",
-                "class $name extends BaseResource\n",
+                "class {$name} extends BaseResource\n",
                 "{\n",
                 $hasSortableRows,
                 "    use HasTabs;\n",
@@ -86,8 +87,8 @@ class WameNova extends Command
                 "    public function fields(NovaRequest \$request)\n",
                 "    {\n",
                 "        return [\n",
-                "            Tabs::make(__('$name2.detail', ['title' => \$this->title]), [\n",
-                "                Tab::make(__('$name2.singular'), [\n",
+                "            Tabs::make(__('{$name2}.detail', ['title' => \$this->title]), [\n",
+                "                Tab::make(__('{$name2}.singular'), [\n",
                 "                    ID::make()->onlyOnForms(),\n",
                 "                ]),\n",
                 "            ])->withToolbar(),\n",
@@ -138,13 +139,13 @@ class WameNova extends Command
                 "        return [];\n",
                 "    }\n",
                 "\n",
-                "}\n"
+                "}\n",
             ];
 
             fwrite($file, implode('', $lines));
             fclose($file);
 
-            $console->info("Created $name Nova resource");
+            $console->info("Created {$name} Nova resource");
         }
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Wame\LaravelCommands\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -43,7 +45,7 @@ class WameMake extends Command
         'lang' => 'Language',
     ];
 
-    public function handle()
+    public function handle(): void
     {
         $modelName = $this->argument('name');
         $commands = $this->commands;
@@ -53,8 +55,10 @@ class WameMake extends Command
 
         if ($customConfiguration) {
             foreach ($this->commands as $index => $command) {
-                $runCommand = $this->confirm('Create '. $this->commandLabels[$command] .'?', true);
-                if (!$runCommand) unset($commands[$index]);
+                $runCommand = $this->confirm('Create ' . $this->commandLabels[$command] . '?', true);
+                if (!$runCommand) {
+                    unset($commands[$index]);
+                }
             }
         }
 
@@ -63,12 +67,12 @@ class WameMake extends Command
             $commandLabel = $this->commandLabels[$command];
 
             if ($customConfiguration) {
-                Artisan::call("wame:$command", ['name' => $modelName]);
+                Artisan::call("wame:{$command}", ['name' => $modelName]);
             } else {
-                if (config("wame-commands.make.$command", true)) {
-                    Artisan::call("wame:$command", ['name' => $modelName]);
+                if (config("wame-commands.make.{$command}", true)) {
+                    Artisan::call("wame:{$command}", ['name' => $modelName]);
                 } else {
-                    $console->error("Configuration setting for $commandLabel is set false, skipping command");
+                    $console->error("Configuration setting for {$commandLabel} is set false, skipping command");
                 }
             }
         }
