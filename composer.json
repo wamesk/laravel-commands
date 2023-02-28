@@ -13,7 +13,7 @@
     "require": {
         "php": "^8.0|^8.1|^8.2",
         "eminiarts/nova-tabs": "^2.1",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^9.0|^10.0",
         "outl1ne/nova-sortable": "^2.0|^3.0",
         "wamesk/laravel-api-response": "^1.0",
         "wamesk/utils": "^1.0"
