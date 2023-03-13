@@ -86,7 +86,7 @@ class WameApiController extends Command
                 "    {\n",
                 "        try {\n",
                 "            \$validator = Validator::code()->validate(\$request->all(), [\n",
-                "                'page' => 'integer|min:1'\n",
+                "                'page' => 'integer|min:1',\n",
                 "                'per_page' => 'integer|min:1'\n",
                 "            ]);\n",
                 "            if (\$validator) return \$validator;\n",
