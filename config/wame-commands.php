@@ -28,5 +28,6 @@ return [
         //'model' => false,
         //'nova' => false,
         //'observer' => false,
+        //'policy' => false,
     ],
 ];

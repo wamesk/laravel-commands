@@ -15,6 +15,7 @@ Laravel package for better artisan commands for making Model etc.
     * [Listeners command](#listeners-command)
     * [Api controller command](#api-controller-command)
     * [Lang command](#lang-command)
+    * [Policy command](#policy-command)
   * [Utils](#utils)
     * [Helpers](#helpers)
       * [Create directory](#create-directory)
@@ -70,6 +71,7 @@ return [
 //        'model' => false,
 //        'nova' => false,
 //        'observer' => false,
+//        'policy' => false,
     ],
 ];
 ```
@@ -87,6 +89,7 @@ This command will run all `php artisan` commands listed below.
 - [wame:model](#model-command)
 - [wame:nova](#nova-resource-command)
 - [wame:observer](#observer-command)
+- [wame:policy](#policy-command)
 
 Run command with *name* parameter at the end. Name parameter is your Model name. (example: User)
 ```shell
@@ -245,6 +248,14 @@ Run this command using
 
 ```shell
 php artisan wame:lang
+```
+
+### Policy command
+
+This command creates a policy if you use the [serenysoft/nova-permissions](https://github.com/serenysoft/nova-permissions) library
+
+```shell
+php artisan wame:policy
 ```
 
 ## Utils
