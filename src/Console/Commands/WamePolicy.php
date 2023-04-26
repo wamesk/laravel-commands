@@ -50,7 +50,7 @@ class WamePolicy extends Command
                 "     *\n",
                 "     * @var string\n",
                 "     */\n",
-                '    public $key' . " = '" . Pluralizer::plural($name) . "';\n",
+                '    public $key' . " = '{$name}';\n",
                 "\n",
                 "}\n",
             ];
