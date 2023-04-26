@@ -26,7 +26,7 @@ class WamePolicy extends Command
 
     public function handle(): void
     {
-        $name = ucfirst(Helpers::camelCaseConvert($this->argument('name')));
+        $name = $this->argument('name');
         $console = $this->output;
 
         if (file_exists(app_path("Policies/{$name}Policy.php"))) {
