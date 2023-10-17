@@ -58,12 +58,14 @@ class Validator
 
         if ($validator->fails()) {
             $errors = $validator->messages()->toArray();
-            $errorText = 'Validation has :number ';
-            $errorText .= count($errors)>1 ? 'errors' : 'error';
+            //$errorText = 'Validation has :number ';
+            //$errorText .= count($errors)>1 ? 'errors' : 'error';
+            $count = count($errors);
 
             return ApiResponse::errors($validator->messages()->toArray())
                 ->code(static::$code, static::$prefix)
-                ->message(__($errorText, ['number' => count($errors)]))
+                ->message(trans_choice('wame-validation.validation', $count, ['number' => $count]))
+                //->message(__($errorText, ['number' => count($errors)]))
                 ->response(static::$statusCode);
         }
 
