@@ -31,14 +31,12 @@ class WameApiController extends Command
         $console = $this->output;
 
         $version = config('wame-commands.version', null);
-
-        // $controllerFile = $version ? "Http/Controllers/" . $version ."/". $name. "Controller.php" : "Http/Controllers/". $name. "Controller.php";
         $idType = config('wame-commands.id-type', 'ulid');
 
         $tableName = mb_strtolower(Pluralizer::plural($name));
 
         $controllerName = $name . 'Controller';
-        $controllerFile = $version ? "Http\Controllers\\{$version}\\{$controllerName}.php" : "Http\Controllers\\{$controllerName}.php";
+        $controllerFile = $version ? "Http/Controllers/{$version}/{$controllerName}.php" : "Http/Controllers/{$controllerName}.php";
 
         $resourceName = $name . 'Resource';
         $resourcePathName = $version ? $version . '\\' . $resourceName : $resourceName;
